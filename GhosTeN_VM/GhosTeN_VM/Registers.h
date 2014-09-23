@@ -1,4 +1,5 @@
-#pragma  once
+#if !defined _REGISTERS_ 
+#define _REGISTERS_
 #include "Types.h"
 
 class Registers
@@ -6,7 +7,8 @@ class Registers
 public:
 	union uRON
 	{
-		Word		w[128];  uWord		uw[128]; 	// четырехбайтовые
+		Byte		b[512];  uByte	    ub[512];
+		Word		w[128];  uWord		uw[128]; 	// четырех байтовые
 		Address	    a[256];  Float		f[128];		
 	} RON;
 
@@ -21,5 +23,5 @@ public:
 		unsigned int : 11;						// пока не используется 
 	} PSW;
 };
-
+#endif
 

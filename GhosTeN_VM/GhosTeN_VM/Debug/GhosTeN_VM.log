@@ -1,17 +1,55 @@
-﻿Сборка начата 18.09.2014 15:41:10.
-     1>Проект "C:\Users\GhosTeN\Documents\Visual Studio 2013\Projects\GhosTeN_VM\GhosTeN_VM\GhosTeN_VM.vcxproj" в узле 2 (целевые объекты Build).
+﻿Сборка начата 23.09.2014 15:38:52.
+     1>Проект "C:\Users\GhosTeN\Documents\GitHub\VM\GhosTeN_VM\GhosTeN_VM\GhosTeN_VM.vcxproj" в узле 2 (целевые объекты Build).
      1>ClCompile:
-         C:\Program Files\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Interpretator.cpp
+         C:\Program Files\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Computer.cpp Interpretator.cpp
+         Computer.cpp
+     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\registers.h(3): warning C4103: c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\registers.h: выравнивание изменилось после включения заголовка, возможно из-за отсутствия директивы #pragma pack(pop)
+     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.h(9): warning C4103: c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.h: выравнивание изменилось после включения заголовка, возможно из-за отсутствия директивы #pragma pack(pop)
+     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\command.h(19): error C2065: Computer: необъявленный идентификатор
+     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\command.h(19): error C2065: a: необъявленный идентификатор
+     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.cpp(1): warning C4103: c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.cpp: выравнивание изменилось после включения заголовка, возможно из-за отсутствия директивы #pragma pack(pop)
+     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.cpp(7): error C2061: синтаксическая ошибка: идентификатор "CmdSTOP"
+     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.cpp(9): error C2061: синтаксическая ошибка: идентификатор "CmdJZ"
+     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.cpp(10): error C2061: синтаксическая ошибка: идентификатор "CmdJNZ"
+     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.cpp(11): error C2061: синтаксическая ошибка: идентификатор "CmdJE"
+     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.cpp(12): error C2061: синтаксическая ошибка: идентификатор "CmdJNE"
+     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.cpp(13): error C2061: синтаксическая ошибка: идентификатор "CmdJA"
+     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.cpp(14): error C2061: синтаксическая ошибка: идентификатор "CmdJNA"
+     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.cpp(15): error C2061: синтаксическая ошибка: идентификатор "CmdJAE"
+     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.cpp(16): error C2061: синтаксическая ошибка: идентификатор "CmdJNAE"
+     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.cpp(17): error C2061: синтаксическая ошибка: идентификатор "CmdJB"
+     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.cpp(18): error C2061: синтаксическая ошибка: идентификатор "CmdJNB"
+     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.cpp(19): error C2061: синтаксическая ошибка: идентификатор "CmdJBE"
+     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.cpp(20): error C2061: синтаксическая ошибка: идентификатор "CmdJNBE"
+     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.cpp(21): error C2061: синтаксическая ошибка: идентификатор "CmdJMPR"
+     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.cpp(22): error C2061: синтаксическая ошибка: идентификатор "CmdJMP"
+     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.cpp(25): error C2061: синтаксическая ошибка: идентификатор "CmdLDWA"
+     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.cpp(26): error C2061: синтаксическая ошибка: идентификатор "CmdSTWA"
+     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.cpp(27): error C2061: синтаксическая ошибка: идентификатор "CmdADD"
+     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.cpp(28): error C2061: синтаксическая ошибка: идентификатор "CmdADD"
+     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.cpp(29): error C2061: синтаксическая ошибка: идентификатор "CmdSUB"
+     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.cpp(30): error C2061: синтаксическая ошибка: идентификатор "CmdMUL"
+     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.cpp(31): error C2061: синтаксическая ошибка: идентификатор "CmdDIV"
+     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.cpp(32): error C2061: синтаксическая ошибка: идентификатор "CmdMOD"
+     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.cpp(33): error C2061: синтаксическая ошибка: идентификатор "CmdCMP"
+     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.cpp(34): error C2061: синтаксическая ошибка: идентификатор "CmdINC"
+     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.cpp(35): error C2061: синтаксическая ошибка: идентификатор "CmdDEC"
+     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.cpp(36): error C2061: синтаксическая ошибка: идентификатор "CmdNEG"
+     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.cpp(37): error C2061: синтаксическая ошибка: идентификатор "CmdABS"
+     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.cpp(79): error C3867: Command::operator (): в вызове функции отсутствует список аргументов; используйте "&Command::operator ()" для создания указателя на член
+     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.cpp(79): error C2440: =: невозможно преобразовать "int (__thiscall Command::* )(void)" в "int"
+                 Не существует контекста, в котором такое преобразование возможно
+         Создание кода...
+         Компиляция...
          Interpretator.cpp
-     1>c:\users\ghosten\documents\visual studio 2013\projects\ghosten_vm\ghosten_vm\registers.h(2): warning C4103: c:\users\ghosten\documents\visual studio 2013\projects\ghosten_vm\ghosten_vm\registers.h: выравнивание изменилось после включения заголовка, возможно из-за отсутствия директивы #pragma pack(pop)
-     1>c:\users\ghosten\documents\visual studio 2013\projects\ghosten_vm\ghosten_vm\computer.h(8): warning C4103: c:\users\ghosten\documents\visual studio 2013\projects\ghosten_vm\ghosten_vm\computer.h: выравнивание изменилось после включения заголовка, возможно из-за отсутствия директивы #pragma pack(pop)
-     1>c:\users\ghosten\documents\visual studio 2013\projects\ghosten_vm\ghosten_vm\interpretator.cpp(8): warning C4103: c:\users\ghosten\documents\visual studio 2013\projects\ghosten_vm\ghosten_vm\interpretator.cpp: выравнивание изменилось после включения заголовка, возможно из-за отсутствия директивы #pragma pack(pop)
-       Link:
-         C:\Program Files\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\GhosTeN\Documents\Visual Studio 2013\Projects\GhosTeN_VM\Debug\GhosTeN_VM.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\GhosTeN\Documents\Visual Studio 2013\Projects\GhosTeN_VM\Debug\GhosTeN_VM.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\GhosTeN\Documents\Visual Studio 2013\Projects\GhosTeN_VM\Debug\GhosTeN_VM.lib" /MACHINE:X86 Debug\Computer.obj
-         Debug\Interpretator.obj
-         GhosTeN_VM.vcxproj -> C:\Users\GhosTeN\Documents\Visual Studio 2013\Projects\GhosTeN_VM\Debug\GhosTeN_VM.exe
-     1>Сборка проекта "C:\Users\GhosTeN\Documents\Visual Studio 2013\Projects\GhosTeN_VM\GhosTeN_VM\GhosTeN_VM.vcxproj" завершена (целевые объекты Build).
+     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\registers.h(3): warning C4103: c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\registers.h: выравнивание изменилось после включения заголовка, возможно из-за отсутствия директивы #pragma pack(pop)
+     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.h(9): warning C4103: c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.h: выравнивание изменилось после включения заголовка, возможно из-за отсутствия директивы #pragma pack(pop)
+     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\command.h(19): error C2065: Computer: необъявленный идентификатор
+     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\command.h(19): error C2065: a: необъявленный идентификатор
+     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\interpretator.cpp(8): warning C4103: c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\interpretator.cpp: выравнивание изменилось после включения заголовка, возможно из-за отсутствия директивы #pragma pack(pop)
+         Создание кода...
+     1>Сборка проекта "C:\Users\GhosTeN\Documents\GitHub\VM\GhosTeN_VM\GhosTeN_VM\GhosTeN_VM.vcxproj" завершена (целевые объекты Build) с ошибкой.
 
-Сборка успешно завершена.
+Ошибка сборки.
 
-Затраченное время: 00:00:01.44
+Затраченное время: 00:00:01.06

@@ -18,9 +18,6 @@
     <ClInclude Include="Command.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
-    <ClInclude Include="Data.h">
-      <Filter>Заголовочные файлы</Filter>
-    </ClInclude>
     <ClInclude Include="operation.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>

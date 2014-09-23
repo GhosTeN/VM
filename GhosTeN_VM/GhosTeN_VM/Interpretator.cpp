@@ -16,20 +16,21 @@ bool loaderTXT(const char *filename, Computer &VM)
 	if (binary.is_open()){					// если файл открылся
 		string code;							// введенная строка
 		unsigned int bincode = 0;				// байт из строки
-		address ip = 0;						// адрес запуска программы
+		Address ip = 0;						// адрес запуска программы
 		istringstream in;						// перевод символьного байта в числовой
 		getline(binary, code);				// ввод адреса загрузки
-		if (code[0] != 'a')					// нет записи со стартовым адресом
+		if (code[0] != 's')					// нет записи со стартовым адресом
 		{
 			cout << "No load address" << endl; return false;
 		}
 		else									// перевод стартового адреса
 		{
-			code = code.substr(1);				// отрезали тип записи a 
+			code = code.substr(1);				// отрезали тип записи s
 			in.str(code); in >> hex >> bincode; // перевели стартовый адрес
 			//cout << setw(4) << hex << bincode << endl;
 			loadaddr = bincode;
 		}
+		
 		getline(binary, code);    			// ввод кода
 		while (!binary.eof())
 		{
