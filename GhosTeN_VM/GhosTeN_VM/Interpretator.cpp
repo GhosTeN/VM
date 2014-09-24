@@ -7,7 +7,6 @@
 using namespace std;
 #include "Computer.h"
 
-
 // загрузчик - текстового - формата------------------ -
 bool loaderTXT(const char *filename, Computer &VM)
 {
@@ -30,18 +29,19 @@ bool loaderTXT(const char *filename, Computer &VM)
 			//cout << setw(4) << hex << bincode << endl;
 			loadaddr = bincode;
 		}
-		
+
 		getline(binary, code);    			// ввод кода
 		while (!binary.eof())
 		{
 			cout << setfill('0');
 			cout << endl;
-			if (code[0] != 'e')             // Конец кодов 
+			if (code[0] != 'e')             // Конец кодов
 			{
 				code = code.substr(1);        // отрезали тип записи k
-				in.str(code);	in.clear();	    // инициализация строкового потока
+				in.str(code);	
+				in.clear();	    // инициализация строкового потока
 				while ((in >> hex >> bincode)) // чтение побайтное
-				{ //cout << setw(2) << hex << bincode << ' '; 
+				{ //cout << setw(2) << hex << bincode << ' ';
 					// запись в память
 					VM.memory.b[loadaddr] = static_cast<uByte>(bincode);
 					++loadaddr;
@@ -50,9 +50,10 @@ bool loaderTXT(const char *filename, Computer &VM)
 			else break;
 			getline(binary, code);			// ввод кода
 		} // while
-		// последняя строка уже была прочитана 
+		// последняя строка уже была прочитана
 		in.clear();  in.str(code.substr(1));  in >> hex >> ip;
-		VM.setIP(ip % 0x10000);  return true;
+		VM.setIP(0 % 0x10000);
+		return true;
 	}
 	else
 	{
@@ -75,9 +76,10 @@ int main(int argc, char *argv[])
 		bool yes = false;
 		yes = loaderTXT(argv[1], VM);
 
-		if (yes) VM.interpreter(debug);
+		if (yes)
+			VM.interpreter(debug);
 		else cout << argv[1] << " - not run!" << endl;
-#if defined DEBUG	 
+#if defined DEBUG
 		logfile.close();
 #endif
 	}

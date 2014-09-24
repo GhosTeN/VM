@@ -1,34 +1,29 @@
-#if !defined _COMMAND_ 
-#define _COMMAND_
+#pragma once
 
 #include "Types.h"
 #include "Computer.h"
 
-
 class Command
 {
-
 protected:
-	//Computer.
-	//Computer *VM;
+	Computer* VM;
 public:
-	virtual int operator()(){ return 0; }
-	Command()
+	int size = 2;
+	Command(Computer& VMM)
 	{
-		//this->VM = &VM;
-		Computer* a;
-		
+		this->VM = &VMM;
 	}
-	
+	virtual int operator()(){ return 0; }
 };
-/*
 class CmdSTOP : public Command
 {
 public:
-	CmdSTOP(Computer& VM) : Command(VM){}
+	
+	CmdSTOP(Computer& VM) : Command(VM){ size = 2; }
 	virtual int operator()() { return 0; }
 };
 
+#pragma region J
 class CmdJZ : public Command
 {
 public:
@@ -164,29 +159,28 @@ public:
 	}
 };
 
-
-
+#pragma  endregion
 
 class CmdLDWA : public Command
 {
 public:
-	CmdLDWA(Computer& VM) : Command(VM){}
-	virtual int operator()() 
+	CmdLDWA(Computer& VM) : Command(VM){ size = 3; }
+	virtual int operator()()
 	{
 		VM->address = VM->RC.CRaW.aW;
-		VM->address %= (64 * 1024);
-		for (int i = 0; i < sizeof(Word); ++i)
+		size_t ii = sizeof(Word);
+		for (int i = 0; i < ii; ++i)
 		{
-			VM->registers.RON.ub[VM->RC.CRaW.R1 + i] = VM->memory.b[VM->address + i];
+			VM->registers.RON.b[VM->RC.CRaW.R1 + i] = VM->memory.b[VM->address + i-1];
 		}
-		return 1; 
+		return 1;
 	}
 };
 
 class CmdSTWA : public Command
 {
 public:
-	CmdSTWA(Computer& VM) : Command(VM){}
+	CmdSTWA(Computer& VM) : Command(VM){ size = 3; }
 	virtual int operator()()
 	{
 		VM->address = VM->RC.CRaW.aW;
@@ -202,7 +196,7 @@ public:
 class CmdADD : public Command
 {
 public:
-	CmdADD(Computer& VM) : Command(VM){}
+	CmdADD(Computer& VM) : Command(VM){ size = 4; }
 	virtual int operator()()
 	{
 		VM->registers.RON.w[VM->RC.CRRR.R1 / 4] =
@@ -256,7 +250,7 @@ public:
 	CmdMOD(Computer& VM) : Command(VM){}
 	virtual int operator()()
 	{
-		VM->registers.RON.w[VM->RC.CRRR.R1 / 4] = 
+		VM->registers.RON.w[VM->RC.CRRR.R1 / 4] =
 			VM->registers.RON.w[VM->RC.CRRR.R2 / 4] % VM->registers.RON.w[VM->RC.CRRR.R3 / 4];
 
 		return 1;
@@ -308,7 +302,7 @@ public:
 	CmdABS(Computer& VM) : Command(VM){}
 	virtual int operator()()
 	{
-		if (VM->registers.RON.w[VM->RC.CR.R/4] < 0)
+		if (VM->registers.RON.w[VM->RC.CR.R / 4] < 0)
 			VM->registers.RON.w[VM->RC.CR.R / 4] = -VM->registers.RON.w[VM->RC.CR.R / 4];
 		return 1;
 	}
@@ -323,6 +317,3 @@ public:
 		return 1;
 	}
 };
-
-*/
-#endif
