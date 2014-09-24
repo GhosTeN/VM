@@ -23,7 +23,8 @@ class Computer
 	//void setPSW();
 
 public:
-
+	uCONSTANT constanst[256];
+	
 	Address address;				// адрес аргумента из команд загрузки-выгрузки
 	RegisterCommand RC;				// регистр команды
 	Registers registers;

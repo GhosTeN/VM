@@ -11,6 +11,8 @@ void Computer::initInstructions()
 #pragma  region instructions
 	//stop
 	this->instructions.push_back(new CmdSTOP(*this));
+	//load
+	this->instructions.push_back(new CmdLDC(*this));
 	//jumps
 	this->instructions.push_back(new CmdJZ(*this));
 	this->instructions.push_back(new CmdJNZ(*this));
@@ -26,6 +28,9 @@ void Computer::initInstructions()
 	this->instructions.push_back(new CmdJNBE(*this));
 	this->instructions.push_back(new CmdJMPR(*this));
 	this->instructions.push_back(new CmdJMP(*this));
+
+	//16
+
 
 	//Integer
 	this->instructions.push_back(new CmdLDWA(*this));
@@ -69,12 +74,12 @@ int Computer::interpreter(bool debug)
 	{
 		Clear(); jumping = false;
 		//if (registers.PSW.IP & 0x00000001u) throw "error!";
-		// выборка 2 байтов
+		// выборка 1 байта
 		RC.rc[0] = memory.b[registers.PSW.IP];
-		RC.rc[1] = memory.b[registers.PSW.IP + 1];
+		
 		nByte = (*instructions[RC.Code]).size;
 		// добираем из памяти байты
-		for (int i = 2; i < nByte; ++i) 
+		for (int i = 1; i < nByte; ++i) 
 			RC.rc[i] = memory.b[registers.PSW.IP + i];
 		if (registers.PSW.TF) Trace();       // отладочная выдача
 		// выполнение команды - косвенный вызов по указателю

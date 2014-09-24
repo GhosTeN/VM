@@ -15,10 +15,24 @@ public:
 	}
 	virtual int operator()(){ return 0; }
 };
+
+class CmdLDC : public Command
+{
+public:
+
+	CmdLDC(Computer& VM) : Command(VM){ size = 8; }
+	virtual int operator()() 
+	{
+		VM->constanst[VM->RC.CCaC.aC] = VM->RC.CCaC.Const;
+		
+		return 1;
+	}
+};
+
 class CmdSTOP : public Command
 {
 public:
-	
+
 	CmdSTOP(Computer& VM) : Command(VM){ size = 2; }
 	virtual int operator()() { return 0; }
 };
@@ -164,14 +178,16 @@ public:
 class CmdLDWA : public Command
 {
 public:
-	CmdLDWA(Computer& VM) : Command(VM){ size = 3; }
+	CmdLDWA(Computer& VM) : Command(VM){ size = 4; }
 	virtual int operator()()
 	{
 		VM->address = VM->RC.CRaW.aW;
+		VM->registers.RON.w[VM->RC.CRaW.R1] = VM->constanst[VM->RC.CRaW.aW].w;
 		size_t ii = sizeof(Word);
 		for (int i = 0; i < ii; ++i)
 		{
-			VM->registers.RON.b[VM->RC.CRaW.R1 + i] = VM->memory.b[VM->address + i-1];
+			
+			//VM->registers.RON.b[VM->RC.CRaW.R1 + i] = VM->memory.b[VM->address + i-1];
 		}
 		return 1;
 	}
@@ -180,7 +196,7 @@ public:
 class CmdSTWA : public Command
 {
 public:
-	CmdSTWA(Computer& VM) : Command(VM){ size = 3; }
+	CmdSTWA(Computer& VM) : Command(VM){ size = 4; }
 	virtual int operator()()
 	{
 		VM->address = VM->RC.CRaW.aW;

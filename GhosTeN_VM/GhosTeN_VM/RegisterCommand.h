@@ -8,4 +8,5 @@ union RegisterCommand                // регистр команд
 	uByte Code;
 	mCRRR_4 CRRR;
 	mCRaW_4 CRaW;
+	mCCaC_6 CCaC;
 };

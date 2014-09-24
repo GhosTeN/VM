@@ -9,8 +9,10 @@ public:
 	{
 		Byte		b[512];  uByte	    ub[512];
 		Word		w[128];  uWord		uw[128]; 	// четырех байтовые
-		Address	    a[256];  Float		f[128];
+		Float		f[128];
 	} RON;
+
+	
 
 	struct sPSW
 	{

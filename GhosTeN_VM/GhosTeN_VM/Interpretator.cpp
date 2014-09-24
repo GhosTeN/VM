@@ -3,6 +3,7 @@
 #include <iomanip>
 #include <sstream>
 #include <string>
+#include <vector>
 
 using namespace std;
 #include "Computer.h"
@@ -10,49 +11,59 @@ using namespace std;
 // загрузчик - текстового - формата------------------ -
 bool loaderTXT(const char *filename, Computer &VM)
 {
-	unsigned int loadaddr = 0;			// адрес загрузки
+	uWord loadaddr = 0;			// адрес загрузки
 	ifstream binary(filename);			// файл с программой
 	if (binary.is_open()){					// если файл открылся
+		uWord startIndex = 0;
+		uWord currentIndex = 0;
 		string code;							// введенная строка
-		unsigned int bincode = 0;				// байт из строки
+		uWord bincode = 0;				// байт из строки
 		Address ip = 0;						// адрес запуска программы
 		istringstream in;						// перевод символьного байта в числовой
 		getline(binary, code);				// ввод адреса загрузки
-		if (code[0] != 's')					// нет записи со стартовым адресом
+		in.str(code); in >> hex >> startIndex; // перевели стартовый адрес
+
+		/*if (code[0] != 's')					// нет записи со стартовым адресом
 		{
-			cout << "No load address" << endl; return false;
+		cout << "No load address" << endl; return false;
 		}
 		else									// перевод стартового адреса
 		{
-			code = code.substr(1);				// отрезали тип записи s
-			in.str(code); in >> hex >> bincode; // перевели стартовый адрес
-			//cout << setw(4) << hex << bincode << endl;
-			loadaddr = bincode;
-		}
+		code = code.substr(1);				// отрезали тип записи s
+
+		//cout << setw(4) << hex << bincode << endl;
+		loadaddr = bincode;
+		}*/
 
 		getline(binary, code);    			// ввод кода
 		while (!binary.eof())
 		{
 			cout << setfill('0');
 			cout << endl;
-			if (code[0] != 'e')             // Конец кодов
-			{
-				code = code.substr(1);        // отрезали тип записи k
-				in.str(code);	
-				in.clear();	    // инициализация строкового потока
-				while ((in >> hex >> bincode)) // чтение побайтное
-				{ //cout << setw(2) << hex << bincode << ' ';
-					// запись в память
-					VM.memory.b[loadaddr] = static_cast<uByte>(bincode);
+			if (startIndex == currentIndex)
+				VM.setIP(loadaddr);
+
+			in.str(code);
+			in.clear();	    // инициализация строкового потока
+			while ((in >> hex >> bincode)) // чтение побайтное
+			{ //cout << setw(2) << hex << bincode << ' ';
+				// запись в память
+				vector<unsigned char> arrayOfByte(4);
+				for (int i = 0; i < 4; i++)
+					arrayOfByte[3 - i] = (bincode >> (i * 8));
+
+				for (int i = 0; i < 4; ++i)
+				{
+					VM.memory.b[loadaddr] = static_cast<uByte>(arrayOfByte[i]);
 					++loadaddr;
-				} // while
-			} // if
-			else break;
+				}
+			}
+
 			getline(binary, code);			// ввод кода
+			++currentIndex;
 		} // while
 		// последняя строка уже была прочитана
 		in.clear();  in.str(code.substr(1));  in >> hex >> ip;
-		VM.setIP(0 % 0x10000);
 		return true;
 	}
 	else
