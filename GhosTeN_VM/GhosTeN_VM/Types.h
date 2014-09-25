@@ -25,6 +25,7 @@ struct mCaC_3
 {
 	uByte Code; Address aC;
 };
+<<<<<<< HEAD
 struct mCRR_3
 {
 	uByte Code; uByte R1; uByte R2;
@@ -32,10 +33,16 @@ struct mCRR_3
 struct mCRRR_4          // йно R R R
 {
 	uByte Code; uByte R1; uByte R2; uByte R3;
+=======
+struct mCRaC_4
+{
+	uByte Code; uByte R; Address aC;
+>>>>>>> origin/master
 };
 struct mCRaC_4
 {
 	uByte Code; uByte R; Address aC;
 };
+
 
 

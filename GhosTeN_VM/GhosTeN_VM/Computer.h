@@ -25,6 +25,10 @@ class Computer
 	//void setPSW();
 
 public:
+<<<<<<< HEAD
+=======
+	
+>>>>>>> origin/master
 	
 	RegisterCommand RC;				// регистр команды
 	Registers registers;

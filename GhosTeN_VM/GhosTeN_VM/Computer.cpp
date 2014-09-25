@@ -11,6 +11,7 @@ void Computer::initInstructions()
 	instructions.insert(std::make_pair<Operations, Command*>(STOP, new CmdSTOP(*this)));
 	instructions.insert(std::make_pair<Operations, Command*>(LDC, new CmdLDC(*this)));
 
+<<<<<<< HEAD
 #pragma region J
 	instructions.insert(std::make_pair<Operations, Command*>(JZ, new CmdJZ(*this)));
 	instructions.insert(std::make_pair<Operations, Command*>(JNZ, new CmdJNZ(*this)));
@@ -63,6 +64,20 @@ void Computer::initInstructions()
 	instructions.insert(std::make_pair<Operations, Command*>(IOUT, new CmdIOUT(*this)));
 #pragma endregion
 
+=======
+	//16
+	//Integer
+	this->instructions.push_back(new CmdADD(*this));
+	this->instructions.push_back(new CmdSUB(*this));
+	this->instructions.push_back(new CmdMUL(*this));
+	this->instructions.push_back(new CmdDIV(*this));
+	this->instructions.push_back(new CmdMOD(*this));
+	this->instructions.push_back(new CmdCMP(*this));
+	this->instructions.push_back(new CmdINC(*this));
+	this->instructions.push_back(new CmdDEC(*this));
+	this->instructions.push_back(new CmdNEG(*this));
+	this->instructions.push_back(new CmdABS(*this));
+>>>>>>> origin/master
 
 }
 void Computer::setIP(Address ip)
@@ -85,12 +100,19 @@ void Computer::clearFlags()
 	registers.PSW.CF 
 		= registers.PSW.OF 
 		= registers.PSW.OV 
+<<<<<<< HEAD
+=======
+		= registers.PSW.UV 
+>>>>>>> origin/master
 		= registers.PSW.TF
 		= registers.PSW.AF
 		= registers.PSW.BF
 		= registers.PSW.EF
 		= registers.PSW.ZF
+<<<<<<< HEAD
 		= registers.PSW.RR
+=======
+>>>>>>> origin/master
 		= 0;
 }
 void Computer::Clear()								// обнуление command
@@ -115,8 +137,13 @@ int Computer::interpreter(bool debug)
 		// код операции - индекс в массиве адресов
 		Operations code = static_cast<Operations>(RC.Code);
 		if (RC.Code < 0xFF)
+<<<<<<< HEAD
 			stoping = (*instructions[code])();
 		
+=======
+			stoping = (*instructions[RC.Code])();
+
+>>>>>>> origin/master
 		if (!jumping)
 			++registers.PSW.IP;					// изменение PC
 	}

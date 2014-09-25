@@ -60,6 +60,7 @@ bool loaderTXT(const char *filename, Computer &VM)
 					++indexByte;
 				//}
 			}
+<<<<<<< HEAD
 			//добор
 			while ((indexByte % 4) != 0)
 			{
@@ -67,6 +68,8 @@ bool loaderTXT(const char *filename, Computer &VM)
 				VM.memory.b[indexByte] = static_cast<uByte>(bincode);
 				++indexByte;
 			}
+=======
+>>>>>>> origin/master
 			++loadaddr;
 			getline(binary, code);			// ввод кода
 			++currentIndex;

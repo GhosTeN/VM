@@ -21,11 +21,19 @@ class CmdLDC : public Command
 public:
 
 	CmdLDC(Computer& VM) : Command(VM){ size = 4; }
+<<<<<<< HEAD
 	virtual int operator()()
 	{
 		VM->registers.R[VM->RC.CRaC.R] = VM->RC.CRaC.aC;
 		//VM->constanst[VM->RC.CCaC.aC] = VM->RC.CCaC.Const;
 
+=======
+	virtual int operator()() 
+	{
+		VM->registers.R[VM->RC.CRaC.R] = VM->RC.CRaC.aC;
+		//VM->constanst[VM->RC.CCaC.aC] = VM->RC.CCaC.Const;
+		
+>>>>>>> origin/master
 		return 1;
 	}
 };
@@ -226,6 +234,7 @@ public:
 		return 1;
 	}
 };
+<<<<<<< HEAD
 class CmdJMPO : public Command
 {
 public:
@@ -258,6 +267,11 @@ public:
 	}
 };
 #pragma  endregion
+=======
+
+#pragma  endregion
+
+>>>>>>> origin/master
 
 #pragma region INTEGER
 class CmdADD : public Command
@@ -268,6 +282,10 @@ public:
 	{
 		VM->memory.w[VM->registers.R[VM->RC.CRRR.R1]] =
 			VM->memory.w[VM->registers.R[VM->RC.CRRR.R2]] + VM->memory.w[VM->registers.R[VM->RC.CRRR.R3]];
+<<<<<<< HEAD
+=======
+		
+>>>>>>> origin/master
 
 		return 1;
 	}
@@ -336,6 +354,10 @@ public:
 
 		if (VM->memory.w[VM->registers.R[VM->RC.CRRR.R2]] == 0)
 			VM->registers.PSW.ZF = 1;
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
 
 		return 1;
 	}
@@ -366,8 +388,13 @@ public:
 	CmdABS(Computer& VM) : Command(VM){}
 	virtual int operator()()
 	{
+<<<<<<< HEAD
 		if (VM->memory.w[VM->registers.R[VM->RC.CR.R]] < 0)
 			VM->memory.w[VM->registers.R[VM->RC.CR.R]] = -VM->memory.w[VM->registers.R[VM->RC.CR.R]];
+=======
+		//if (VM->registers.RON.w[VM->RC.CR.R / 4] < 0)
+		//	VM->registers.RON.w[VM->RC.CR.R / 4] = -VM->registers.RON.w[VM->RC.CR.R / 4];
+>>>>>>> origin/master
 		return 1;
 	}
 };
@@ -377,6 +404,7 @@ public:
 	CmdNEG(Computer& VM) : Command(VM){}
 	virtual int operator()()
 	{
+<<<<<<< HEAD
 		VM->memory.w[VM->registers.R[VM->RC.CR.R]] = -VM->memory.w[VM->registers.R[VM->RC.CR.R]];
 		return 1;
 	}
@@ -398,6 +426,9 @@ public:
 	virtual int operator()()
 	{
 		std::cin >> VM->memory.w[VM->registers.R[VM->RC.CR.R]];
+=======
+		//VM->registers.RON.w[VM->RC.CR.R / 4] = -VM->registers.RON.w[VM->RC.CR.R / 4];
+>>>>>>> origin/master
 		return 1;
 	}
 };
