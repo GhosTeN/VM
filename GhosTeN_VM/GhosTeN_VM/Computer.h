@@ -7,15 +7,17 @@ using namespace std;
 #include "Registers.h"
 #include "Memory.h"
 #include "RegisterCommand.h"
+#include "operation.h"
 #include <vector>
+#include <unordered_map>
 #pragma pack(1)
 
 class Command;
 class Computer
 {
-	vector<Command*> instructions;
-
+	unordered_map<Operations, Command*> instructions;
 	bool jumping;
+	
 	void Clear();					// обнуление
 	void Trace();					// ~Debug
 	void initInstructions();
@@ -23,14 +25,13 @@ class Computer
 	//void setPSW();
 
 public:
-	uCONSTANT constanst[256];
 	
-	Address address;				// адрес аргумента из команд загрузки-выгрузки
 	RegisterCommand RC;				// регистр команды
 	Registers registers;
 	Memory memory;
 
 	Computer();
+	void clearFlags();				// обнуление флагов
 	int reset(bool debug);
 	int interpreter(bool debug);
 	void setIP(Address ip);

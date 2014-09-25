@@ -1,5 +1,5 @@
 #pragma once
-
+#include <iostream>
 #include "Types.h"
 #include "Computer.h"
 
@@ -20,15 +20,15 @@ class CmdLDC : public Command
 {
 public:
 
-	CmdLDC(Computer& VM) : Command(VM){ size = 8; }
-	virtual int operator()() 
+	CmdLDC(Computer& VM) : Command(VM){ size = 4; }
+	virtual int operator()()
 	{
-		VM->constanst[VM->RC.CCaC.aC] = VM->RC.CCaC.Const;
-		
+		VM->registers.R[VM->RC.CRaC.R] = VM->RC.CRaC.aC;
+		//VM->constanst[VM->RC.CCaC.aC] = VM->RC.CCaC.Const;
+
 		return 1;
 	}
 };
-
 class CmdSTOP : public Command
 {
 public:
@@ -44,67 +44,90 @@ public:
 	CmdJZ(Computer& VM) : Command(VM){}
 	virtual int operator()()
 	{
-		return 0;
+		//если не ноль, то пропускаем команду
+		if (VM->registers.PSW.ZF == 0)
+		{
+			++VM->registers.PSW.IP;
+		}
+		return 1;
 	}
 };
-
 class CmdJNZ : public Command
 {
 public:
 	CmdJNZ(Computer& VM) : Command(VM){}
 	virtual int operator()()
 	{
-		return 0;
+		if (VM->registers.PSW.ZF == 1)
+		{
+			++VM->registers.PSW.IP;
+		}
+		return 1;
 	}
 };
-
 class CmdJE : public Command
 {
 public:
 	CmdJE(Computer& VM) : Command(VM){}
 	virtual int operator()()
 	{
-		return 0;
+		if (VM->registers.PSW.EF == 0)
+		{
+			++VM->registers.PSW.IP;
+		}
+		return 1;
 	}
 };
-
 class CmdJNE : public Command
 {
 public:
 	CmdJNE(Computer& VM) : Command(VM){}
 	virtual int operator()()
 	{
-		return 0;
+		if (VM->registers.PSW.EF == 1)
+		{
+			++VM->registers.PSW.IP;
+		}
+		return 1;
 	}
 };
-
 class CmdJA : public Command
 {
 public:
 	CmdJA(Computer& VM) : Command(VM){}
 	virtual int operator()()
 	{
-		return 0;
+		if (VM->registers.PSW.AF == 0)
+		{
+			++VM->registers.PSW.IP;
+		}
+		return 1;
 	}
 };
-
 class CmdJNA : public Command
 {
 public:
 	CmdJNA(Computer& VM) : Command(VM){}
 	virtual int operator()()
 	{
-		return 0;
+		if (VM->registers.PSW.AF == 1)
+		{
+			++VM->registers.PSW.IP;
+		}
+		return 1;
 	}
 };
-
 class CmdJAE : public Command
 {
 public:
 	CmdJAE(Computer& VM) : Command(VM){}
 	virtual int operator()()
 	{
-		return 0;
+		if (VM->registers.PSW.AF == 0 && VM->registers.PSW.EF == 0)
+		{
+			++VM->registers.PSW.IP;
+		}
+		return 1;
 	}
 };
 
@@ -114,17 +137,24 @@ public:
 	CmdJNAE(Computer& VM) : Command(VM){}
 	virtual int operator()()
 	{
-		return 0;
+		if (VM->registers.PSW.AF == 1 || VM->registers.PSW.EF == 1)
+		{
+			++VM->registers.PSW.IP;
+		}
+		return 1;
 	}
 };
-
 class CmdJB : public Command
 {
 public:
 	CmdJB(Computer& VM) : Command(VM){}
 	virtual int operator()()
 	{
-		return 0;
+		if (VM->registers.PSW.BF == 0)
+		{
+			++VM->registers.PSW.IP;
+		}
+		return 1;
 	}
 };
 class CmdJNB : public Command
@@ -133,7 +163,11 @@ public:
 	CmdJNB(Computer& VM) : Command(VM){}
 	virtual int operator()()
 	{
-		return 0;
+		if (VM->registers.PSW.BF == 1)
+		{
+			++VM->registers.PSW.IP;
+		}
+		return 1;
 	}
 };
 class CmdJBE : public Command
@@ -142,7 +176,11 @@ public:
 	CmdJBE(Computer& VM) : Command(VM){}
 	virtual int operator()()
 	{
-		return 0;
+		if (VM->registers.PSW.BF == 0 && VM->registers.PSW.EF == 0)
+		{
+			++VM->registers.PSW.IP;
+		}
+		return 1;
 	}
 };
 class CmdJNBE : public Command
@@ -151,7 +189,21 @@ public:
 	CmdJNBE(Computer& VM) : Command(VM){}
 	virtual int operator()()
 	{
-		return 0;
+		if (VM->registers.PSW.BF == 1 || VM->registers.PSW.EF == 1)
+		{
+			++VM->registers.PSW.IP;
+		}
+		return 1;
+	}
+};
+class CmdJMPC : public Command
+{
+public:
+	CmdJMPC(Computer& VM) : Command(VM){}
+	virtual int operator()()
+	{
+		VM->setIP(VM->RC.CaC.aC);
+		return 1;
 	}
 };
 class CmdJMPR : public Command
@@ -160,76 +212,74 @@ public:
 	CmdJMPR(Computer& VM) : Command(VM){}
 	virtual int operator()()
 	{
-		return 0;
+		VM->setIP(VM->memory.w[VM->registers.R[VM->RC.CR.R]]);
+		return 1;
 	}
 };
-class CmdJMP : public Command
+class CmdJMPRR : public Command
 {
 public:
-	CmdJMP(Computer& VM) : Command(VM){}
+	CmdJMPRR(Computer& VM) : Command(VM){}
 	virtual int operator()()
 	{
-		return 0;
+		VM->setIP(VM->memory.w[VM->registers.R[VM->RC.CRR.R1]] + VM->memory.w[VM->registers.R[VM->RC.CRR.R2]]);
+		return 1;
 	}
 };
-
+class CmdJMPO : public Command
+{
+public:
+	CmdJMPO(Computer& VM) : Command(VM){}
+	virtual int operator()()
+	{
+		VM->registers.PSW.IP += VM->RC.CaC.aC;
+		return 1;
+	}
+};
+class CmdCALL : public Command
+{
+public:
+	CmdCALL(Computer& VM) : Command(VM){}
+	virtual int operator()()
+	{
+		VM->memory.w[VM->registers.R[VM->RC.CRaC.R]] = VM->registers.PSW.IP;
+		VM->setIP(VM->RC.CRaC.aC);
+		return 1;
+	}
+};
+class CmdRETURN : public Command
+{
+public:
+	CmdRETURN(Computer& VM) : Command(VM){}
+	virtual int operator()()
+	{
+		VM->setIP(VM->memory.w[VM->registers.R[VM->registers.PSW.RR]]);
+		return 1;
+	}
+};
 #pragma  endregion
 
-class CmdLDWA : public Command
-{
-public:
-	CmdLDWA(Computer& VM) : Command(VM){ size = 4; }
-	virtual int operator()()
-	{
-		VM->address = VM->RC.CRaW.aW;
-		VM->registers.RON.w[VM->RC.CRaW.R1] = VM->constanst[VM->RC.CRaW.aW].w;
-		size_t ii = sizeof(Word);
-		for (int i = 0; i < ii; ++i)
-		{
-			
-			//VM->registers.RON.b[VM->RC.CRaW.R1 + i] = VM->memory.b[VM->address + i-1];
-		}
-		return 1;
-	}
-};
-
-class CmdSTWA : public Command
-{
-public:
-	CmdSTWA(Computer& VM) : Command(VM){ size = 4; }
-	virtual int operator()()
-	{
-		VM->address = VM->RC.CRaW.aW;
-		VM->address %= (64 * 1024);
-		for (int i = 0; i < sizeof(Word); ++i)
-		{
-			VM->memory.b[VM->address + i] = VM->registers.RON.b[VM->RC.CRaW.R1 + i];
-		}
-		return 1;
-	}
-};
-
+#pragma region INTEGER
 class CmdADD : public Command
 {
 public:
 	CmdADD(Computer& VM) : Command(VM){ size = 4; }
 	virtual int operator()()
 	{
-		VM->registers.RON.w[VM->RC.CRRR.R1 / 4] =
-			VM->registers.RON.w[VM->RC.CRRR.R2 / 4] + VM->registers.RON.w[VM->RC.CRRR.R3 / 4];
+		VM->memory.w[VM->registers.R[VM->RC.CRRR.R1]] =
+			VM->memory.w[VM->registers.R[VM->RC.CRRR.R2]] + VM->memory.w[VM->registers.R[VM->RC.CRRR.R3]];
 
 		return 1;
 	}
 };
-
 class CmdSUB : public Command
 {
 public:
 	CmdSUB(Computer& VM) : Command(VM){}
 	virtual int operator()()
 	{
-		VM->registers.RON.w[VM->RC.CRRR.R1 / 4] =
-			VM->registers.RON.w[VM->RC.CRRR.R2 / 4] - VM->registers.RON.w[VM->RC.CRRR.R3 / 4];
+		VM->memory.w[VM->registers.R[VM->RC.CRRR.R1]] =
+			VM->memory.w[VM->registers.R[VM->RC.CRRR.R2]] - VM->memory.w[VM->registers.R[VM->RC.CRRR.R3]];
 
 		return 1;
 	}
@@ -240,86 +290,84 @@ public:
 	CmdMUL(Computer& VM) : Command(VM){}
 	virtual int operator()()
 	{
-		VM->registers.RON.w[VM->RC.CRRR.R1 / 4] =
-			VM->registers.RON.w[VM->RC.CRRR.R2 / 4] * VM->registers.RON.w[VM->RC.CRRR.R3 / 4];
+		VM->memory.w[VM->registers.R[VM->RC.CRRR.R1]] =
+			VM->memory.w[VM->registers.R[VM->RC.CRRR.R2]] * VM->memory.w[VM->registers.R[VM->RC.CRRR.R3]];
 
 		return 1;
 	}
 };
-
 class CmdDIV : public Command
 {
 public:
 	CmdDIV(Computer& VM) : Command(VM){}
 	virtual int operator()()
 	{
-		VM->registers.RON.w[VM->RC.CRRR.R1 / 4] =
-			VM->registers.RON.w[VM->RC.CRRR.R2 / 4] / VM->registers.RON.w[VM->RC.CRRR.R3 / 4];
+		VM->memory.w[VM->registers.R[VM->RC.CRRR.R1]] =
+			VM->memory.w[VM->registers.R[VM->RC.CRRR.R2]] / VM->memory.w[VM->registers.R[VM->RC.CRRR.R3]];
 
 		return 1;
 	}
 };
-
 class CmdMOD : public Command
 {
 public:
 	CmdMOD(Computer& VM) : Command(VM){}
 	virtual int operator()()
 	{
-		VM->registers.RON.w[VM->RC.CRRR.R1 / 4] =
-			VM->registers.RON.w[VM->RC.CRRR.R2 / 4] % VM->registers.RON.w[VM->RC.CRRR.R3 / 4];
+		VM->memory.w[VM->registers.R[VM->RC.CRRR.R1]] =
+			VM->memory.w[VM->registers.R[VM->RC.CRRR.R2]] % VM->memory.w[VM->registers.R[VM->RC.CRRR.R3]];
 
 		return 1;
 	}
 };
-
 class CmdCMP : public Command
 {
 public:
 	CmdCMP(Computer& VM) : Command(VM){}
 	virtual int operator()()
 	{
-		if (VM->registers.RON.w[VM->RC.CRRR.R1 / 4] > VM->registers.RON.w[VM->RC.CRRR.R3 / 4])
-			VM->registers.RON.w[VM->RC.CRRR.R2 / 4] = +1;
-		else if (VM->registers.RON.w[VM->RC.CRRR.R1 / 4] == VM->registers.RON.w[VM->RC.CRRR.R3 / 4])
-			VM->registers.RON.w[VM->RC.CRRR.R2 / 4] = 0;
+		VM->clearFlags();
+		if (VM->memory.w[VM->registers.R[VM->RC.CRRR.R2]] > VM->memory.w[VM->registers.R[VM->RC.CRRR.R3]])
+			VM->registers.PSW.AF = 1;
+		else if (VM->memory.w[VM->registers.R[VM->RC.CRRR.R2]] < VM->memory.w[VM->registers.R[VM->RC.CRRR.R3]])
+			VM->registers.PSW.BF = 1;
 		else
-			VM->registers.RON.w[VM->RC.CRRR.R2 / 4] = -1;
+			VM->registers.PSW.EF = 1;
+
+		if (VM->memory.w[VM->registers.R[VM->RC.CRRR.R2]] == 0)
+			VM->registers.PSW.ZF = 1;
 
 		return 1;
 	}
 };
-
 class CmdINC : public Command
 {
 public:
 	CmdINC(Computer& VM) : Command(VM){}
 	virtual int operator()()
 	{
-		++VM->registers.RON.w[VM->RC.CR.R / 4];
+		++VM->memory.w[VM->registers.R[VM->RC.CR.R]];
 		return 1;
 	}
 };
-
 class CmdDEC : public Command
 {
 public:
 	CmdDEC(Computer& VM) : Command(VM){}
 	virtual int operator()()
 	{
-		--VM->registers.RON.w[VM->RC.CR.R / 4];
+		--VM->memory.w[VM->registers.R[VM->RC.CR.R]];
 		return 1;
 	}
 };
-
 class CmdABS : public Command
 {
 public:
 	CmdABS(Computer& VM) : Command(VM){}
 	virtual int operator()()
 	{
-		if (VM->registers.RON.w[VM->RC.CR.R / 4] < 0)
-			VM->registers.RON.w[VM->RC.CR.R / 4] = -VM->registers.RON.w[VM->RC.CR.R / 4];
+		if (VM->memory.w[VM->registers.R[VM->RC.CR.R]] < 0)
+			VM->memory.w[VM->registers.R[VM->RC.CR.R]] = -VM->memory.w[VM->registers.R[VM->RC.CR.R]];
 		return 1;
 	}
 };
@@ -329,7 +377,28 @@ public:
 	CmdNEG(Computer& VM) : Command(VM){}
 	virtual int operator()()
 	{
-		VM->registers.RON.w[VM->RC.CR.R / 4] = -VM->registers.RON.w[VM->RC.CR.R / 4];
+		VM->memory.w[VM->registers.R[VM->RC.CR.R]] = -VM->memory.w[VM->registers.R[VM->RC.CR.R]];
 		return 1;
 	}
 };
+class CmdIOUT : public Command
+{
+public:
+	CmdIOUT(Computer& VM) : Command(VM){}
+	virtual int operator()()
+	{
+		std::cout << VM->memory.w[VM->registers.R[VM->RC.CR.R]];
+		return 1;
+	}
+};
+class CmdIIN : public Command
+{
+public:
+	CmdIIN(Computer& VM) : Command(VM){}
+	virtual int operator()()
+	{
+		std::cin >> VM->memory.w[VM->registers.R[VM->RC.CR.R]];
+		return 1;
+	}
+};
+#pragma endregion

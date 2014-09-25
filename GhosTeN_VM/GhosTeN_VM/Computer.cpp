@@ -8,45 +8,62 @@ Computer::Computer()
 }
 void Computer::initInstructions()
 {
-#pragma  region instructions
-	//stop
-	this->instructions.push_back(new CmdSTOP(*this));
-	//load
-	this->instructions.push_back(new CmdLDC(*this));
-	//jumps
-	this->instructions.push_back(new CmdJZ(*this));
-	this->instructions.push_back(new CmdJNZ(*this));
-	this->instructions.push_back(new CmdJE(*this));
-	this->instructions.push_back(new CmdJNE(*this));
-	this->instructions.push_back(new CmdJA(*this));
-	this->instructions.push_back(new CmdJNA(*this));
-	this->instructions.push_back(new CmdJAE(*this));
-	this->instructions.push_back(new CmdJNAE(*this));
-	this->instructions.push_back(new CmdJB(*this));
-	this->instructions.push_back(new CmdJNB(*this));
-	this->instructions.push_back(new CmdJBE(*this));
-	this->instructions.push_back(new CmdJNBE(*this));
-	this->instructions.push_back(new CmdJMPR(*this));
-	this->instructions.push_back(new CmdJMP(*this));
+	instructions.insert(std::make_pair<Operations, Command*>(STOP, new CmdSTOP(*this)));
+	instructions.insert(std::make_pair<Operations, Command*>(LDC, new CmdLDC(*this)));
 
-	//16
+#pragma region J
+	instructions.insert(std::make_pair<Operations, Command*>(JZ, new CmdJZ(*this)));
+	instructions.insert(std::make_pair<Operations, Command*>(JNZ, new CmdJNZ(*this)));
+
+	instructions.insert(std::make_pair<Operations, Command*>(JE, new CmdJE(*this)));
+	instructions.insert(std::make_pair<Operations, Command*>(JNE, new CmdJNE(*this)));
+
+	instructions.insert(std::make_pair<Operations, Command*>(JA, new CmdJA(*this)));
+	instructions.insert(std::make_pair<Operations, Command*>(JNA, new CmdJNA(*this)));
+	instructions.insert(std::make_pair<Operations, Command*>(JAE, new CmdJAE(*this)));
+	instructions.insert(std::make_pair<Operations, Command*>(JNAE, new CmdJNAE(*this)));
+
+	instructions.insert(std::make_pair<Operations, Command*>(JB, new CmdJB(*this)));
+	instructions.insert(std::make_pair<Operations, Command*>(JNB, new CmdJNB(*this)));
+	instructions.insert(std::make_pair<Operations, Command*>(JBE, new CmdJBE(*this)));
+	instructions.insert(std::make_pair<Operations, Command*>(JNBE, new CmdJNBE(*this)));
+
+	instructions.insert(std::make_pair<Operations, Command*>(JMPC, new CmdJMPC(*this)));
+	instructions.insert(std::make_pair<Operations, Command*>(JMPR, new CmdJMPR(*this)));
+	instructions.insert(std::make_pair<Operations, Command*>(JMPRR, new CmdJMPRR(*this)));
+	instructions.insert(std::make_pair<Operations, Command*>(JMPO, new CmdJMPO(*this)));
+#pragma endregion
+
+	instructions.insert(std::make_pair<Operations, Command*>(CALL, new CmdCALL(*this)));
+	instructions.insert(std::make_pair<Operations, Command*>(RETURN, new CmdRETURN(*this)));
+
+#pragma region unsigned integer
+#pragma endregion
+
+#pragma region integer
+	instructions.insert(std::make_pair<Operations, Command*>(ADD, new CmdADD(*this)));
+	instructions.insert(std::make_pair<Operations, Command*>(SUB, new CmdSUB(*this)));
+	instructions.insert(std::make_pair<Operations, Command*>(MUL, new CmdMUL(*this)));
+	instructions.insert(std::make_pair<Operations, Command*>(DIV, new CmdDIV(*this)));
+	instructions.insert(std::make_pair<Operations, Command*>(MOD, new CmdMOD(*this)));
+	instructions.insert(std::make_pair<Operations, Command*>(CMP, new CmdCMP(*this)));
+	instructions.insert(std::make_pair<Operations, Command*>(INC, new CmdINC(*this)));
+	instructions.insert(std::make_pair<Operations, Command*>(DEC, new CmdDEC(*this)));
+	instructions.insert(std::make_pair<Operations, Command*>(NEG, new CmdNEG(*this)));
+	instructions.insert(std::make_pair<Operations, Command*>(ABS, new CmdABS(*this)));
+#pragma endregion
+
+#pragma region float
+#pragma endregion
+	
+#pragma region IO
+	instructions.insert(std::make_pair<Operations, Command*>(IIN, new CmdIIN(*this)));
+
+	
+	instructions.insert(std::make_pair<Operations, Command*>(IOUT, new CmdIOUT(*this)));
+#pragma endregion
 
 
-	//Integer
-	this->instructions.push_back(new CmdLDWA(*this));
-	this->instructions.push_back(new CmdSTWA(*this));
-	this->instructions.push_back(new CmdADD(*this));
-	this->instructions.push_back(new CmdSUB(*this));
-	this->instructions.push_back(new CmdMUL(*this));
-	this->instructions.push_back(new CmdDIV(*this));
-	this->instructions.push_back(new CmdMOD(*this));
-	this->instructions.push_back(new CmdCMP(*this));
-	this->instructions.push_back(new CmdINC(*this));
-	this->instructions.push_back(new CmdDEC(*this));
-	this->instructions.push_back(new CmdNEG(*this));
-	this->instructions.push_back(new CmdABS(*this));
-
-#pragma  endregion
 }
 void Computer::setIP(Address ip)
 {
@@ -57,10 +74,24 @@ int Computer::reset(bool debug)
 	registers.PSW.IP = 0;
 	// считаем стек словах
 	// registers.SP = mKw * 1024;			// за последним адресом слова
-	registers.PSW.CF = registers.PSW.OF = registers.PSW.OV = registers.PSW.UV = 0;
-	if (debug) registers.PSW.TF = 1; else registers.PSW.TF = 0;
-	for (int i = 0; i < 64; ++i) registers.RON.w[i] = 0;
+	
+	clearFlags();
+	if (debug) registers.PSW.TF = 1;
+	for (int i = 0; i < 64; ++i) memory.w[registers.R[i]] = 0;
 	return 0;
+}
+void Computer::clearFlags()
+{
+	registers.PSW.CF 
+		= registers.PSW.OF 
+		= registers.PSW.OV 
+		= registers.PSW.TF
+		= registers.PSW.AF
+		= registers.PSW.BF
+		= registers.PSW.EF
+		= registers.PSW.ZF
+		= registers.PSW.RR
+		= 0;
 }
 void Computer::Clear()								// обнуление command
 {
@@ -72,24 +103,22 @@ int Computer::interpreter(bool debug)
 	uByte nByte = 0;
 	while (stoping)
 	{
-		Clear(); jumping = false;
-		//if (registers.PSW.IP & 0x00000001u) throw "error!";
-		// выборка 1 байта
-		RC.rc[0] = memory.b[registers.PSW.IP];
+		Clear(); 
+		jumping = false;
 		
-		nByte = (*instructions[RC.Code]).size;
+		for (int i = 0; i < sizeof(Word); ++i)
+			RC.rc[i] = memory.b[registers.PSW.IP * 4 + i];
+
 		// добираем из памяти байты
-		for (int i = 1; i < nByte; ++i) 
-			RC.rc[i] = memory.b[registers.PSW.IP + i];
 		if (registers.PSW.TF) Trace();       // отладочная выдача
 		// выполнение команды - косвенный вызов по указателю
 		// код операции - индекс в массиве адресов
+		Operations code = static_cast<Operations>(RC.Code);
 		if (RC.Code < 0xFF)
-			stoping = (*instructions[RC.Code])();
-		//else                stoping = ffCmd[RC.FF.Code].function(*this);
-		// если не команда перехода
+			stoping = (*instructions[code])();
+		
 		if (!jumping)
-			registers.PSW.IP += nByte;					// изменение PC
+			++registers.PSW.IP;					// изменение PC
 	}
 	return 0;
 }

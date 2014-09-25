@@ -8,5 +8,6 @@ union Memory
 {
 	uByte		b[mKb * 1024];	 		// 64 килобайт	// 32 K полуслов
 	Word		w[mKw * 1024];			// 16 к слов
+	uWord	   uw[mKw * 1024];
 	Float		f[mKw * 1024];			// 16 K слов
 };

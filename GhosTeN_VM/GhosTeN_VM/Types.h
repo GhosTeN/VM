@@ -21,16 +21,21 @@ struct mCR_2            //  Œœ R - 2 ·‡ÈÚ‡
 {
 	uByte Code; uByte R;
 };
+struct mCaC_3
+{
+	uByte Code; Address aC;
+};
+struct mCRR_3
+{
+	uByte Code; uByte R1; uByte R2;
+};
 struct mCRRR_4          //  Œœ R R R
 {
 	uByte Code; uByte R1; uByte R2; uByte R3;
 };
-struct mCRaW_4
+struct mCRaC_4
 {
-	uByte Code; uByte R1; Address aW;
+	uByte Code; uByte R; Address aC;
 };
-struct mCCaC_6
-{
-	uByte Code; Address aC; uCONSTANT Const;
-};
+
 
