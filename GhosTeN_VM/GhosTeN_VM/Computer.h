@@ -16,6 +16,7 @@ class Computer
 	vector<Command*> instructions;
 
 	bool jumping;
+	
 	void Clear();					// обнуление
 	void Trace();					// ~Debug
 	void initInstructions();
@@ -23,7 +24,7 @@ class Computer
 	//void setPSW();
 
 public:
-	uCONSTANT constanst[256];
+	
 	
 	Address address;				// адрес аргумента из команд загрузки-выгрузки
 	RegisterCommand RC;				// регистр команды
@@ -31,6 +32,7 @@ public:
 	Memory memory;
 
 	Computer();
+	void clearFlags();				// обнуление флагов
 	int reset(bool debug);
 	int interpreter(bool debug);
 	void setIP(Address ip);

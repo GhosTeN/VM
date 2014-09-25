@@ -3,10 +3,9 @@
 
 union RegisterCommand                // регистр команд
 {
-	uByte rc[8];
+	uByte rc[4];
 	mCR_2 CR;
 	uByte Code;
 	mCRRR_4 CRRR;
-	mCRaW_4 CRaW;
-	mCCaC_6 CCaC;
+	mCRaC_4 CRaC;
 };

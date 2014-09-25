@@ -30,11 +30,7 @@ void Computer::initInstructions()
 	this->instructions.push_back(new CmdJMP(*this));
 
 	//16
-
-
 	//Integer
-	this->instructions.push_back(new CmdLDWA(*this));
-	this->instructions.push_back(new CmdSTWA(*this));
 	this->instructions.push_back(new CmdADD(*this));
 	this->instructions.push_back(new CmdSUB(*this));
 	this->instructions.push_back(new CmdMUL(*this));
@@ -57,10 +53,24 @@ int Computer::reset(bool debug)
 	registers.PSW.IP = 0;
 	// считаем стек словах
 	// registers.SP = mKw * 1024;			// за последним адресом слова
-	registers.PSW.CF = registers.PSW.OF = registers.PSW.OV = registers.PSW.UV = 0;
-	if (debug) registers.PSW.TF = 1; else registers.PSW.TF = 0;
-	for (int i = 0; i < 64; ++i) registers.RON.w[i] = 0;
+	
+	clearFlags();
+	if (debug) registers.PSW.TF = 1;
+	for (int i = 0; i < 64; ++i) memory.w[registers.R[i]] = 0;
 	return 0;
+}
+void Computer::clearFlags()
+{
+	registers.PSW.CF 
+		= registers.PSW.OF 
+		= registers.PSW.OV 
+		= registers.PSW.UV 
+		= registers.PSW.TF
+		= registers.PSW.AF
+		= registers.PSW.BF
+		= registers.PSW.EF
+		= registers.PSW.ZF
+		= 0;
 }
 void Computer::Clear()								// обнуление command
 {
@@ -72,24 +82,21 @@ int Computer::interpreter(bool debug)
 	uByte nByte = 0;
 	while (stoping)
 	{
-		Clear(); jumping = false;
-		//if (registers.PSW.IP & 0x00000001u) throw "error!";
-		// выборка 1 байта
-		RC.rc[0] = memory.b[registers.PSW.IP];
+		Clear(); 
+		jumping = false;
 		
-		nByte = (*instructions[RC.Code]).size;
+		for (int i = 0; i < sizeof(Word); ++i)
+			RC.rc[i] = memory.b[registers.PSW.IP * 4 + i];
+
 		// добираем из памяти байты
-		for (int i = 1; i < nByte; ++i) 
-			RC.rc[i] = memory.b[registers.PSW.IP + i];
 		if (registers.PSW.TF) Trace();       // отладочная выдача
 		// выполнение команды - косвенный вызов по указателю
 		// код операции - индекс в массиве адресов
 		if (RC.Code < 0xFF)
 			stoping = (*instructions[RC.Code])();
-		//else                stoping = ffCmd[RC.FF.Code].function(*this);
-		// если не команда перехода
+
 		if (!jumping)
-			registers.PSW.IP += nByte;					// изменение PC
+			++registers.PSW.IP;					// изменение PC
 	}
 	return 0;
 }

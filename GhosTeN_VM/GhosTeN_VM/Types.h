@@ -25,12 +25,9 @@ struct mCRRR_4          // йно R R R
 {
 	uByte Code; uByte R1; uByte R2; uByte R3;
 };
-struct mCRaW_4
+struct mCRaC_4
 {
-	uByte Code; uByte R1; Address aW;
+	uByte Code; uByte R; Address aC;
 };
-struct mCCaC_6
-{
-	uByte Code; Address aC; uCONSTANT Const;
-};
+
 

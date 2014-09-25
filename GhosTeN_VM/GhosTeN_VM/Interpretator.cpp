@@ -12,6 +12,7 @@ using namespace std;
 bool loaderTXT(const char *filename, Computer &VM)
 {
 	uWord loadaddr = 0;			// адрес загрузки
+	uWord indexByte = 0;
 	ifstream binary(filename);			// файл с программой
 	if (binary.is_open()){					// если файл открылся
 		uWord startIndex = 0;
@@ -45,20 +46,21 @@ bool loaderTXT(const char *filename, Computer &VM)
 
 			in.str(code);
 			in.clear();	    // инициализация строкового потока
+			
 			while ((in >> hex >> bincode)) // чтение побайтное
 			{ //cout << setw(2) << hex << bincode << ' ';
 				// запись в память
-				vector<unsigned char> arrayOfByte(4);
-				for (int i = 0; i < 4; i++)
-					arrayOfByte[3 - i] = (bincode >> (i * 8));
+				//vector<unsigned char> arrayOfByte(4);
+				//for (int i = 0; i < 4; i++)
+					//arrayOfByte[i] = (bincode >> (i * 8));
 
-				for (int i = 0; i < 4; ++i)
-				{
-					VM.memory.b[loadaddr] = static_cast<uByte>(arrayOfByte[i]);
-					++loadaddr;
-				}
+				//for (int i = 0; i < 4; ++i)
+				//{
+					VM.memory.b[indexByte] = static_cast<uByte>(bincode);
+					++indexByte;
+				//}
 			}
-
+			++loadaddr;
 			getline(binary, code);			// ввод кода
 			++currentIndex;
 		} // while
