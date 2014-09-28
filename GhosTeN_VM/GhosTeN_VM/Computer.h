@@ -22,13 +22,8 @@ class Computer
 	void Trace();					// ~Debug
 	void initInstructions();
 
-	//void setPSW();
-
 public:
-<<<<<<< HEAD
-=======
-	
->>>>>>> origin/master
+
 	
 	RegisterCommand RC;				// регистр команды
 	Registers registers;

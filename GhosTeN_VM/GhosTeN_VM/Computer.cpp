@@ -1,6 +1,6 @@
 #include "Computer.h"
 #include "Command.h"
-
+#include <Windows.h>
 Computer::Computer()
 {
 	Clear();
@@ -11,7 +11,6 @@ void Computer::initInstructions()
 	instructions.insert(std::make_pair<Operations, Command*>(STOP, new CmdSTOP(*this)));
 	instructions.insert(std::make_pair<Operations, Command*>(LDC, new CmdLDC(*this)));
 
-<<<<<<< HEAD
 #pragma region J
 	instructions.insert(std::make_pair<Operations, Command*>(JZ, new CmdJZ(*this)));
 	instructions.insert(std::make_pair<Operations, Command*>(JNZ, new CmdJNZ(*this)));
@@ -39,6 +38,14 @@ void Computer::initInstructions()
 	instructions.insert(std::make_pair<Operations, Command*>(RETURN, new CmdRETURN(*this)));
 
 #pragma region unsigned integer
+	instructions.insert(std::make_pair<Operations, Command*>(UADD, new CmdUADD(*this)));
+	instructions.insert(std::make_pair<Operations, Command*>(USUB, new CmdUSUB(*this)));
+	instructions.insert(std::make_pair<Operations, Command*>(UMUL, new CmdUMUL(*this)));
+	instructions.insert(std::make_pair<Operations, Command*>(UDIV, new CmdUDIV(*this)));
+	instructions.insert(std::make_pair<Operations, Command*>(UMOD, new CmdUMOD(*this)));
+	instructions.insert(std::make_pair<Operations, Command*>(UCMP, new CmdUCMP(*this)));
+	instructions.insert(std::make_pair<Operations, Command*>(UINC, new CmdUINC(*this)));
+	instructions.insert(std::make_pair<Operations, Command*>(UDEC, new CmdUDEC(*this)));
 #pragma endregion
 
 #pragma region integer
@@ -55,29 +62,27 @@ void Computer::initInstructions()
 #pragma endregion
 
 #pragma region float
+	instructions.insert(std::make_pair<Operations, Command*>(FADD, new CmdFADD(*this)));
+	instructions.insert(std::make_pair<Operations, Command*>(FSUB, new CmdFSUB(*this)));
+	instructions.insert(std::make_pair<Operations, Command*>(FMUL, new CmdFMUL(*this)));
+	instructions.insert(std::make_pair<Operations, Command*>(FDIV, new CmdFDIV(*this)));
+	instructions.insert(std::make_pair<Operations, Command*>(FCMP, new CmdFCMP(*this)));
+	instructions.insert(std::make_pair<Operations, Command*>(FNEG, new CmdFNEG(*this)));
+	instructions.insert(std::make_pair<Operations, Command*>(FABS, new CmdFABS(*this)));
 #pragma endregion
 	
 #pragma region IO
 	instructions.insert(std::make_pair<Operations, Command*>(IIN, new CmdIIN(*this)));
+	instructions.insert(std::make_pair<Operations, Command*>(UIN, new CmdUIN(*this)));
+	instructions.insert(std::make_pair<Operations, Command*>(FIN, new CmdFIN(*this)));
 
 	
 	instructions.insert(std::make_pair<Operations, Command*>(IOUT, new CmdIOUT(*this)));
+	instructions.insert(std::make_pair<Operations, Command*>(UOUT, new CmdUOUT(*this)));
+	instructions.insert(std::make_pair<Operations, Command*>(FOUT, new CmdFOUT(*this)));
 #pragma endregion
 
-=======
-	//16
-	//Integer
-	this->instructions.push_back(new CmdADD(*this));
-	this->instructions.push_back(new CmdSUB(*this));
-	this->instructions.push_back(new CmdMUL(*this));
-	this->instructions.push_back(new CmdDIV(*this));
-	this->instructions.push_back(new CmdMOD(*this));
-	this->instructions.push_back(new CmdCMP(*this));
-	this->instructions.push_back(new CmdINC(*this));
-	this->instructions.push_back(new CmdDEC(*this));
-	this->instructions.push_back(new CmdNEG(*this));
-	this->instructions.push_back(new CmdABS(*this));
->>>>>>> origin/master
+
 
 }
 void Computer::setIP(Address ip)
@@ -100,65 +105,70 @@ void Computer::clearFlags()
 	registers.PSW.CF 
 		= registers.PSW.OF 
 		= registers.PSW.OV 
-<<<<<<< HEAD
-=======
-		= registers.PSW.UV 
->>>>>>> origin/master
-		= registers.PSW.TF
 		= registers.PSW.AF
 		= registers.PSW.BF
 		= registers.PSW.EF
 		= registers.PSW.ZF
-<<<<<<< HEAD
 		= registers.PSW.RR
-=======
->>>>>>> origin/master
 		= 0;
 }
 void Computer::Clear()								// обнуление command
 {
-	for (int i = 0; i < 8; ++i) RC.rc[i] = 0;
+	for (int i = 0; i < 4; ++i) RC.rc[i] = 0;
 }
 int Computer::interpreter(bool debug)
 {
-	int stoping = 1;
+	int STATE = 1;
 	uByte nByte = 0;
-	while (stoping)
+	while (STATE)
 	{
 		Clear(); 
 		jumping = false;
 		
+		// читаем слово
 		for (int i = 0; i < sizeof(Word); ++i)
 			RC.rc[i] = memory.b[registers.PSW.IP * 4 + i];
 
-		// добираем из памяти байты
 		if (registers.PSW.TF) Trace();       // отладочная выдача
 		// выполнение команды - косвенный вызов по указателю
 		// код операции - индекс в массиве адресов
 		Operations code = static_cast<Operations>(RC.Code);
-		if (RC.Code < 0xFF)
-<<<<<<< HEAD
-			stoping = (*instructions[code])();
-		
-=======
-			stoping = (*instructions[RC.Code])();
+			STATE = (*instructions[code])();
 
->>>>>>> origin/master
-		if (!jumping)
-			++registers.PSW.IP;					// изменение PC
+
+			if (STATE != 2)
+				++registers.PSW.IP;					// изменение PC
 	}
 	return 0;
 }
 void Computer::Trace()                   // трассировка покомандная
 {
-	cout << setfill('0');
-	cout << setw(5) << dec << registers.PSW.IP << ": ";
-	int nByte = 0;
-	if (RC.Code < 0xFF)				// основной набор команд
-		//nByte = Cmd[RC.Code].Length;
-		//else                      			// команды пересылки
-		//	nByte = ffCmd[RC.FF.Code].Length;
-		for (int i = 0; i < nByte; ++i)
-			cout << setw(2) << hex << int(RC.rc[i]) << ' ';
 	cout << endl;
+	Operations code = static_cast<Operations>(RC.Code);
+	cout << "IP: " << setfill('0') << setw(5) << registers.PSW.IP;
+	cout << " Code: " << setfill('0') << setw(2) << hex << int(RC.Code) << endl << "->";
+		for (int i = 0; i < 4; ++i)
+			cout << setfill('0') << setw(2) << hex << int(RC.rc[i]) << ' ';
+		switch (code)
+		{
+		case IIN:
+			cout << "\t IIN: ";
+			break;
+		case IOUT:
+			cout << "\t IOUT: ";
+			break;
+		case UIN:
+			cout << "\t UIN: ";
+			break;
+		case UOUT:
+			cout << "\t UOUT: ";
+			break;
+		case FIN:
+			cout << "\t FIN: ";
+			break;
+		case FOUT:
+			cout << "\t FOUT: ";
+			break;
+		}
 }
+

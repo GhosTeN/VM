@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <cmath>
 #include "Types.h"
 #include "Computer.h"
 
@@ -8,7 +9,6 @@ class Command
 protected:
 	Computer* VM;
 public:
-	int size = 2;
 	Command(Computer& VMM)
 	{
 		this->VM = &VMM;
@@ -20,20 +20,11 @@ class CmdLDC : public Command
 {
 public:
 
-	CmdLDC(Computer& VM) : Command(VM){ size = 4; }
-<<<<<<< HEAD
+	CmdLDC(Computer& VM) : Command(VM){}
+
 	virtual int operator()()
 	{
 		VM->registers.R[VM->RC.CRaC.R] = VM->RC.CRaC.aC;
-		//VM->constanst[VM->RC.CCaC.aC] = VM->RC.CCaC.Const;
-
-=======
-	virtual int operator()() 
-	{
-		VM->registers.R[VM->RC.CRaC.R] = VM->RC.CRaC.aC;
-		//VM->constanst[VM->RC.CCaC.aC] = VM->RC.CCaC.Const;
-		
->>>>>>> origin/master
 		return 1;
 	}
 };
@@ -41,7 +32,7 @@ class CmdSTOP : public Command
 {
 public:
 
-	CmdSTOP(Computer& VM) : Command(VM){ size = 2; }
+	CmdSTOP(Computer& VM) : Command(VM){  }
 	virtual int operator()() { return 0; }
 };
 
@@ -53,7 +44,7 @@ public:
 	virtual int operator()()
 	{
 		//если не ноль, то пропускаем команду
-		if (VM->registers.PSW.ZF == 0)
+		if (VM->registers.PSW.ZF != 1)
 		{
 			++VM->registers.PSW.IP;
 		}
@@ -211,7 +202,7 @@ public:
 	virtual int operator()()
 	{
 		VM->setIP(VM->RC.CaC.aC);
-		return 1;
+		return 2;
 	}
 };
 class CmdJMPR : public Command
@@ -221,7 +212,7 @@ public:
 	virtual int operator()()
 	{
 		VM->setIP(VM->memory.w[VM->registers.R[VM->RC.CR.R]]);
-		return 1;
+		return 2;
 	}
 };
 class CmdJMPRR : public Command
@@ -231,18 +222,22 @@ public:
 	virtual int operator()()
 	{
 		VM->setIP(VM->memory.w[VM->registers.R[VM->RC.CRR.R1]] + VM->memory.w[VM->registers.R[VM->RC.CRR.R2]]);
-		return 1;
+		return 2;
 	}
 };
-<<<<<<< HEAD
+
 class CmdJMPO : public Command
 {
 public:
 	CmdJMPO(Computer& VM) : Command(VM){}
 	virtual int operator()()
 	{
-		VM->registers.PSW.IP += VM->RC.CaC.aC;
-		return 1;
+		int sdivg = VM->RC.CRaC.aC;
+		if (VM->RC.CRaC.R > 0)
+			VM->registers.PSW.IP += sdivg;
+		else
+			VM->registers.PSW.IP -= sdivg;
+		return 2;
 	}
 };
 class CmdCALL : public Command
@@ -253,7 +248,7 @@ public:
 	{
 		VM->memory.w[VM->registers.R[VM->RC.CRaC.R]] = VM->registers.PSW.IP;
 		VM->setIP(VM->RC.CRaC.aC);
-		return 1;
+		return 2;
 	}
 };
 class CmdRETURN : public Command
@@ -267,26 +262,139 @@ public:
 	}
 };
 #pragma  endregion
-=======
 
-#pragma  endregion
+#pragma region UNSIGNED INTEGER
+class CmdUADD : public Command
+{
+public:
+	CmdUADD(Computer& VM) : Command(VM){  }
+	virtual int operator()()
+	{
+		VM->memory.uw[VM->registers.R[VM->RC.CRRR.R1]] =
+			VM->memory.uw[VM->registers.R[VM->RC.CRRR.R2]] + VM->memory.uw[VM->registers.R[VM->RC.CRRR.R3]];
+		return 1;
+	}
+};
+class CmdUSUB : public Command
+{
+public:
+	CmdUSUB(Computer& VM) : Command(VM){}
+	virtual int operator()()
+	{
+		VM->memory.uw[VM->registers.R[VM->RC.CRRR.R1]] =
+			VM->memory.uw[VM->registers.R[VM->RC.CRRR.R2]] - VM->memory.uw[VM->registers.R[VM->RC.CRRR.R3]];
 
->>>>>>> origin/master
+		return 1;
+	}
+};
+class CmdUMUL : public Command
+{
+public:
+	CmdUMUL(Computer& VM) : Command(VM){}
+	virtual int operator()()
+	{
+		VM->memory.uw[VM->registers.R[VM->RC.CRRR.R1]] =
+			VM->memory.uw[VM->registers.R[VM->RC.CRRR.R2]] * VM->memory.uw[VM->registers.R[VM->RC.CRRR.R3]];
+
+		return 1;
+	}
+};
+class CmdUDIV : public Command
+{
+public:
+	CmdUDIV(Computer& VM) : Command(VM){}
+	virtual int operator()()
+	{
+		VM->memory.uw[VM->registers.R[VM->RC.CRRR.R1]] =
+			VM->memory.uw[VM->registers.R[VM->RC.CRRR.R2]] / VM->memory.uw[VM->registers.R[VM->RC.CRRR.R3]];
+
+		return 1;
+	}
+};
+class CmdUMOD : public Command
+{
+public:
+	CmdUMOD(Computer& VM) : Command(VM){}
+	virtual int operator()()
+	{
+		VM->memory.uw[VM->registers.R[VM->RC.CRRR.R1]] =
+			VM->memory.uw[VM->registers.R[VM->RC.CRRR.R2]] % VM->memory.uw[VM->registers.R[VM->RC.CRRR.R3]];
+
+		return 1;
+	}
+};
+class CmdUCMP : public Command
+{
+public:
+	CmdUCMP(Computer& VM) : Command(VM){}
+	virtual int operator()()
+	{
+		VM->clearFlags();
+		if (VM->memory.uw[VM->registers.R[VM->RC.CRR.R1]] > VM->memory.uw[VM->registers.R[VM->RC.CRR.R1]])
+			VM->registers.PSW.AF = 1;
+		else if (VM->memory.uw[VM->registers.R[VM->RC.CRR.R1]] < VM->memory.uw[VM->registers.R[VM->RC.CRR.R2]])
+			VM->registers.PSW.BF = 1;
+		else
+			VM->registers.PSW.EF = 1;
+
+		if (VM->memory.uw[VM->registers.R[VM->RC.CRR.R1]] == 0)
+			VM->registers.PSW.ZF = 1;
+
+		return 1;
+	}
+};
+class CmdUINC : public Command
+{
+public:
+	CmdUINC(Computer& VM) : Command(VM){}
+	virtual int operator()()
+	{
+		++VM->memory.uw[VM->registers.R[VM->RC.CR.R]];
+		return 1;
+	}
+};
+class CmdUDEC : public Command
+{
+public:
+	CmdUDEC(Computer& VM) : Command(VM){}
+	virtual int operator()()
+	{
+		--VM->memory.uw[VM->registers.R[VM->RC.CR.R]];
+		return 1;
+	}
+};
+class CmdUOUT : public Command
+{
+public:
+	CmdUOUT(Computer& VM) : Command(VM){}
+	virtual int operator()()
+	{
+		std::cout << dec << VM->memory.uw[VM->registers.R[VM->RC.CR.R]];
+		return 1;
+	}
+};
+class CmdUIN : public Command
+{
+public:
+	CmdUIN(Computer& VM) : Command(VM){}
+	virtual int operator()()
+	{
+		std::cin >> VM->memory.uw[VM->registers.R[VM->RC.CR.R]];
+
+		return 1;
+	}
+};
+#pragma endregion
 
 #pragma region INTEGER
 class CmdADD : public Command
 {
 public:
-	CmdADD(Computer& VM) : Command(VM){ size = 4; }
+	CmdADD(Computer& VM) : Command(VM){  }
 	virtual int operator()()
 	{
 		VM->memory.w[VM->registers.R[VM->RC.CRRR.R1]] =
 			VM->memory.w[VM->registers.R[VM->RC.CRRR.R2]] + VM->memory.w[VM->registers.R[VM->RC.CRRR.R3]];
-<<<<<<< HEAD
-=======
-		
->>>>>>> origin/master
-
 		return 1;
 	}
 };
@@ -345,19 +453,15 @@ public:
 	virtual int operator()()
 	{
 		VM->clearFlags();
-		if (VM->memory.w[VM->registers.R[VM->RC.CRRR.R2]] > VM->memory.w[VM->registers.R[VM->RC.CRRR.R3]])
+		if (VM->memory.w[VM->registers.R[VM->RC.CRR.R1]] > VM->memory.w[VM->registers.R[VM->RC.CRR.R1]])
 			VM->registers.PSW.AF = 1;
-		else if (VM->memory.w[VM->registers.R[VM->RC.CRRR.R2]] < VM->memory.w[VM->registers.R[VM->RC.CRRR.R3]])
+		else if (VM->memory.w[VM->registers.R[VM->RC.CRR.R1]] < VM->memory.w[VM->registers.R[VM->RC.CRR.R2]])
 			VM->registers.PSW.BF = 1;
 		else
 			VM->registers.PSW.EF = 1;
 
-		if (VM->memory.w[VM->registers.R[VM->RC.CRRR.R2]] == 0)
+		if (VM->memory.w[VM->registers.R[VM->RC.CRR.R1]] == 0)
 			VM->registers.PSW.ZF = 1;
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/master
 
 		return 1;
 	}
@@ -388,13 +492,9 @@ public:
 	CmdABS(Computer& VM) : Command(VM){}
 	virtual int operator()()
 	{
-<<<<<<< HEAD
 		if (VM->memory.w[VM->registers.R[VM->RC.CR.R]] < 0)
 			VM->memory.w[VM->registers.R[VM->RC.CR.R]] = -VM->memory.w[VM->registers.R[VM->RC.CR.R]];
-=======
-		//if (VM->registers.RON.w[VM->RC.CR.R / 4] < 0)
-		//	VM->registers.RON.w[VM->RC.CR.R / 4] = -VM->registers.RON.w[VM->RC.CR.R / 4];
->>>>>>> origin/master
+
 		return 1;
 	}
 };
@@ -404,7 +504,6 @@ public:
 	CmdNEG(Computer& VM) : Command(VM){}
 	virtual int operator()()
 	{
-<<<<<<< HEAD
 		VM->memory.w[VM->registers.R[VM->RC.CR.R]] = -VM->memory.w[VM->registers.R[VM->RC.CR.R]];
 		return 1;
 	}
@@ -415,7 +514,7 @@ public:
 	CmdIOUT(Computer& VM) : Command(VM){}
 	virtual int operator()()
 	{
-		std::cout << VM->memory.w[VM->registers.R[VM->RC.CR.R]];
+		std::cout << dec << VM->memory.w[VM->registers.R[VM->RC.CR.R]];
 		return 1;
 	}
 };
@@ -426,9 +525,124 @@ public:
 	virtual int operator()()
 	{
 		std::cin >> VM->memory.w[VM->registers.R[VM->RC.CR.R]];
-=======
-		//VM->registers.RON.w[VM->RC.CR.R / 4] = -VM->registers.RON.w[VM->RC.CR.R / 4];
->>>>>>> origin/master
+
+		return 1;
+	}
+};
+#pragma endregion
+
+#pragma region FLOAT
+class CmdFADD : public Command
+{
+public:
+	CmdFADD(Computer& VM) : Command(VM){  }
+	virtual int operator()()
+	{
+		VM->memory.f[VM->registers.R[VM->RC.CRRR.R1]] =
+			VM->memory.f[VM->registers.R[VM->RC.CRRR.R2]] + VM->memory.f[VM->registers.R[VM->RC.CRRR.R3]];
+		return 1;
+	}
+};
+class CmdFSUB : public Command
+{
+public:
+	CmdFSUB(Computer& VM) : Command(VM){}
+	virtual int operator()()
+	{
+		VM->memory.f[VM->registers.R[VM->RC.CRRR.R1]] =
+			VM->memory.f[VM->registers.R[VM->RC.CRRR.R2]] - VM->memory.f[VM->registers.R[VM->RC.CRRR.R3]];
+
+		return 1;
+	}
+};
+class CmdFMUL : public Command
+{
+public:
+	CmdFMUL(Computer& VM) : Command(VM){}
+	virtual int operator()()
+	{
+		VM->memory.f[VM->registers.R[VM->RC.CRRR.R1]] =
+			VM->memory.f[VM->registers.R[VM->RC.CRRR.R2]] * VM->memory.f[VM->registers.R[VM->RC.CRRR.R3]];
+
+		return 1;
+	}
+};
+class CmdFDIV : public Command
+{
+public:
+	CmdFDIV(Computer& VM) : Command(VM){}
+	virtual int operator()()
+	{
+		VM->memory.f[VM->registers.R[VM->RC.CRRR.R1]] =
+			VM->memory.f[VM->registers.R[VM->RC.CRRR.R2]] / VM->memory.f[VM->registers.R[VM->RC.CRRR.R3]];
+
+		return 1;
+	}
+};
+
+class CmdFCMP : public Command
+{
+public:
+	CmdFCMP(Computer& VM) : Command(VM){}
+	virtual int operator()()
+	{
+		VM->clearFlags();
+		if (VM->memory.f[VM->registers.R[VM->RC.CRR.R1]] > VM->memory.f[VM->registers.R[VM->RC.CRR.R1]])
+			VM->registers.PSW.AF = 1;
+		else if (VM->memory.f[VM->registers.R[VM->RC.CRR.R1]] < VM->memory.f[VM->registers.R[VM->RC.CRR.R2]])
+			VM->registers.PSW.BF = 1;
+		else if (fabs(VM->memory.f[VM->registers.R[VM->RC.CRR.R1]] - VM->memory.f[VM->registers.R[VM->RC.CRR.R2]]) < 0.0000001)
+			VM->registers.PSW.EF = 1;
+
+		if (VM->memory.f[VM->registers.R[VM->RC.CRR.R1]] < 0.0000001)
+			VM->registers.PSW.ZF = 1;
+
+		return 1;
+	}
+};
+
+class CmdFABS : public Command
+{
+public:
+	CmdFABS(Computer& VM) : Command(VM){}
+	virtual int operator()()
+	{
+		if (VM->memory.f[VM->registers.R[VM->RC.CR.R]] < 0)
+			VM->memory.f[VM->registers.R[VM->RC.CR.R]] = -VM->memory.f[VM->registers.R[VM->RC.CR.R]];
+
+		return 1;
+	}
+};
+class CmdFNEG : public Command
+{
+public:
+	CmdFNEG(Computer& VM) : Command(VM){}
+	virtual int operator()()
+	{
+		VM->memory.f[VM->registers.R[VM->RC.CR.R]] = -VM->memory.f[VM->registers.R[VM->RC.CR.R]];
+		return 1;
+	}
+};
+
+
+class CmdFOUT : public Command
+{
+public:
+	CmdFOUT(Computer& VM) : Command(VM){}
+	virtual int operator()()
+	{
+		std::cout << dec << VM->memory.f[VM->registers.R[VM->RC.CR.R]];
+		return 1;
+	}
+};
+class CmdFIN : public Command
+{
+public:
+	CmdFIN(Computer& VM) : Command(VM){}
+	virtual int operator()()
+	{
+		std::cin >> VM->memory.f[VM->registers.R[VM->RC.CR.R]];
+
 		return 1;
 	}
 };

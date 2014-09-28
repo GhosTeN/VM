@@ -5,15 +5,6 @@
 class Registers
 {
 public:
-<<<<<<< HEAD
-=======
-	/*union uRON
-	{
-		Byte		b[512];  uByte	    ub[512];
-		Word		w[128];  uWord		uw[128]; 	// четырех байтовые
-		Float		f[128];
-	} RON;*/
->>>>>>> origin/master
 
 	Address R[256];
 
@@ -28,10 +19,6 @@ public:
 		unsigned int EF : 1;					// флаг равно
 		unsigned int ZF : 1;					// флаг нуля
 		unsigned int IP : 16;
-<<<<<<< HEAD
 		unsigned int RR : 8;					// индекс регистра возврата
-=======
-		unsigned int : 7;						// пока не используется
->>>>>>> origin/master
 	} PSW;
 };

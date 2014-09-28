@@ -4,10 +4,6 @@
 union RegisterCommand                // регистр команд
 {
 	uByte rc[4];
-<<<<<<< HEAD
-=======
-	mCR_2 CR;
->>>>>>> origin/master
 	uByte Code;
 	mCR_2 CR;
 	mCaC_3 CaC;

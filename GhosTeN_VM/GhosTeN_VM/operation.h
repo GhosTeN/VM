@@ -12,12 +12,12 @@ enum Operations      // Коды операций основной набор
 	CALL, RETURN,
 
 	// целая беззнаковая
+	UADD = 0x30, USUB, UMUL, UDIV, UMOD, UCMP, UINC, UDEC,
 	// целая знаковая
 	ADD = 0x40, SUB, MUL, DIV, MOD, CMP, INC, DEC, ABS, NEG,
 	
 	// плавающая арифметика
-	FADD = 0x50, FSUB, FMUL, FDIV, FMOD, FCMP,
-	FRND, FSQRT, FEXP, FSIN, FATAN, FLN, FLD1, FLD2, FLDPI, FLDE,
+	FADD = 0x50, FSUB, FMUL, FDIV, FCMP, FABS, FNEG,
 	//вывод
 	IIN = 0x70, IOUT, UIN, UOUT,  FIN, FOUT,
 };
