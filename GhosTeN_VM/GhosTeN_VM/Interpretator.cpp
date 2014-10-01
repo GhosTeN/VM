@@ -24,18 +24,6 @@ bool loaderTXT(const char *filename, Computer &VM)
 		getline(binary, code);				// ввод адреса загрузки
 		in.str(code); in >> hex >> startIndex; // перевели стартовый адрес
 
-		/*if (code[0] != 's')					// нет записи со стартовым адресом
-		{
-		cout << "No load address" << endl; return false;
-		}
-		else									// перевод стартового адреса
-		{
-		code = code.substr(1);				// отрезали тип записи s
-
-		//cout << setw(4) << hex << bincode << endl;
-		loadaddr = bincode;
-		}*/
-
 		getline(binary, code);    			// ввод кода
 		while (!binary.eof())
 		{
@@ -48,17 +36,10 @@ bool loaderTXT(const char *filename, Computer &VM)
 			in.clear();	    // инициализация строкового потока
 			
 			while ((in >> hex >> bincode)) // чтение побайтное
-			{ //cout << setw(2) << hex << bincode << ' ';
+			{
 				// запись в память
-				//vector<unsigned char> arrayOfByte(4);
-				//for (int i = 0; i < 4; i++)
-					//arrayOfByte[i] = (bincode >> (i * 8));
-
-				//for (int i = 0; i < 4; ++i)
-				//{
 					VM.memory.b[indexByte] = static_cast<uByte>(bincode);
 					++indexByte;
-				//}
 			}
 			//добор
 			while ((indexByte % 4) != 0)

@@ -1,17 +1,16 @@
-﻿Сборка начата 28.09.2014 16:05:36.
+﻿Сборка начата 01.10.2014 16:56:15.
      1>Проект "C:\Users\GhosTeN\Documents\GitHub\VM\GhosTeN_VM\GhosTeN_VM\GhosTeN_VM.vcxproj" в узле 2 (целевые объекты Build).
      1>ClCompile:
-         D:\programms\vs2013\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Computer.cpp
-     1>cl : командная строка warning D9028: сбой минимальной повторной сборки, возврат к обычной сборке
+         C:\Program Files\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Computer.cpp
          Computer.cpp
-     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.h(7): warning C4103: c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.h: выравнивание изменилось после включения заголовка, возможно из-за отсутствия директивы #pragma pack(pop)
+     1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.h(8): warning C4103: c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.h: выравнивание изменилось после включения заголовка, возможно из-за отсутствия директивы #pragma pack(pop)
      1>c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.cpp(1): warning C4103: c:\users\ghosten\documents\github\vm\ghosten_vm\ghosten_vm\computer.cpp: выравнивание изменилось после включения заголовка, возможно из-за отсутствия директивы #pragma pack(pop)
        Link:
-         D:\programms\vs2013\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\GhosTeN\Documents\GitHub\VM\GhosTeN_VM\Debug\GhosTeN_VM.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\GhosTeN\Documents\GitHub\VM\GhosTeN_VM\Debug\GhosTeN_VM.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\GhosTeN\Documents\GitHub\VM\GhosTeN_VM\Debug\GhosTeN_VM.lib" /MACHINE:X86 Debug\Computer.obj
+         C:\Program Files\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\GhosTeN\Documents\GitHub\VM\GhosTeN_VM\Debug\GhosTeN_VM.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\GhosTeN\Documents\GitHub\VM\GhosTeN_VM\Debug\GhosTeN_VM.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\GhosTeN\Documents\GitHub\VM\GhosTeN_VM\Debug\GhosTeN_VM.lib" /MACHINE:X86 Debug\Computer.obj
          Debug\Interpretator.obj
          GhosTeN_VM.vcxproj -> C:\Users\GhosTeN\Documents\GitHub\VM\GhosTeN_VM\Debug\GhosTeN_VM.exe
      1>Сборка проекта "C:\Users\GhosTeN\Documents\GitHub\VM\GhosTeN_VM\GhosTeN_VM\GhosTeN_VM.vcxproj" завершена (целевые объекты Build).
 
 Сборка успешно завершена.
 
-Затраченное время: 00:00:03.57
+Затраченное время: 00:00:02.65

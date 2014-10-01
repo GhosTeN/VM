@@ -8,6 +8,20 @@ class Command
 {
 protected:
 	Computer* VM;
+	int isCorrectInput()
+	{
+		int correct = 1;
+		if (std::cin.fail())
+		{
+			VM->SetConsoleTextColor(15, 12);
+			std::cerr << "ERROR: Input" << endl;
+			std::cin.clear();
+			correct = 0;
+			VM->SetConsoleTextColor(7, 0);
+		}
+
+		return correct;
+	}
 public:
 	Command(Computer& VMM)
 	{
@@ -369,7 +383,7 @@ public:
 	CmdUOUT(Computer& VM) : Command(VM){}
 	virtual int operator()()
 	{
-		std::cout << dec << VM->memory.uw[VM->registers.R[VM->RC.CR.R]];
+		std::cout << "UOUT: " << dec << VM->memory.uw[VM->registers.R[VM->RC.CR.R]] << std::endl;
 		return 1;
 	}
 };
@@ -379,9 +393,10 @@ public:
 	CmdUIN(Computer& VM) : Command(VM){}
 	virtual int operator()()
 	{
+		std::cout << "UIN: ";
 		std::cin >> VM->memory.uw[VM->registers.R[VM->RC.CR.R]];
 
-		return 1;
+		return isCorrectInput();
 	}
 };
 #pragma endregion
@@ -514,7 +529,8 @@ public:
 	CmdIOUT(Computer& VM) : Command(VM){}
 	virtual int operator()()
 	{
-		std::cout << dec << VM->memory.w[VM->registers.R[VM->RC.CR.R]];
+		
+		std::cout << "IOUT: " << dec << VM->memory.w[VM->registers.R[VM->RC.CR.R]] << std::endl;
 		return 1;
 	}
 };
@@ -524,9 +540,10 @@ public:
 	CmdIIN(Computer& VM) : Command(VM){}
 	virtual int operator()()
 	{
+		std::cout << "IIN: ";
 		std::cin >> VM->memory.w[VM->registers.R[VM->RC.CR.R]];
 
-		return 1;
+		return isCorrectInput();
 	}
 };
 #pragma endregion
@@ -579,7 +596,6 @@ public:
 		return 1;
 	}
 };
-
 class CmdFCMP : public Command
 {
 public:
@@ -600,7 +616,6 @@ public:
 		return 1;
 	}
 };
-
 class CmdFABS : public Command
 {
 public:
@@ -623,15 +638,14 @@ public:
 		return 1;
 	}
 };
-
-
 class CmdFOUT : public Command
 {
 public:
 	CmdFOUT(Computer& VM) : Command(VM){}
 	virtual int operator()()
 	{
-		std::cout << dec << VM->memory.f[VM->registers.R[VM->RC.CR.R]];
+
+		std::cout << "FOUT: " << dec << VM->memory.f[VM->registers.R[VM->RC.CR.R]] << std::endl;
 		return 1;
 	}
 };
@@ -641,9 +655,10 @@ public:
 	CmdFIN(Computer& VM) : Command(VM){}
 	virtual int operator()()
 	{
+		std::cout << "FIN: ";
 		std::cin >> VM->memory.f[VM->registers.R[VM->RC.CR.R]];
 
-		return 1;
+		return isCorrectInput();
 	}
 };
 #pragma endregion

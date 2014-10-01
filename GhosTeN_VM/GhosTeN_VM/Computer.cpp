@@ -1,10 +1,16 @@
 #include "Computer.h"
 #include "Command.h"
+#include "Debug.h"
 #include <Windows.h>
 Computer::Computer()
 {
 	Clear();
 	initInstructions();
+}
+void Computer::SetConsoleTextColor(Word colorBackground, Word colorForeground)
+{
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, (Word)((colorForeground << 4) | colorBackground));
 }
 void Computer::initInstructions()
 {
@@ -92,8 +98,6 @@ void Computer::setIP(Address ip)
 int Computer::reset(bool debug)
 {
 	registers.PSW.IP = 0;
-	// считаем стек словах
-	// registers.SP = mKw * 1024;			// за последним адресом слова
 	
 	clearFlags();
 	if (debug) registers.PSW.TF = 1;
@@ -116,39 +120,54 @@ void Computer::Clear()								// обнуление command
 {
 	for (int i = 0; i < 4; ++i) RC.rc[i] = 0;
 }
+
 int Computer::interpreter(bool debug)
 {
+	Debug d(&memory, &registers);
 	int STATE = 1;
 	uByte nByte = 0;
 	while (STATE)
 	{
 		Clear(); 
-		jumping = false;
 		
+		COORD coord;
+		coord.X = 0;
+		coord.Y = 0;
+		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+
 		// читаем слово
 		for (int i = 0; i < sizeof(Word); ++i)
 			RC.rc[i] = memory.b[registers.PSW.IP * 4 + i];
 
-		if (registers.PSW.TF) Trace();       // отладочная выдача
-		// выполнение команды - косвенный вызов по указателю
-		// код операции - индекс в массиве адресов
+		if (registers.PSW.TF) Trace();
 		Operations code = static_cast<Operations>(RC.Code);
+		d.printIP();
+		d.printFlugs();
+		cout << endl;
+		d.printMemoryByte();
+		if (instructions.find(code) != instructions.end())
+		{
 			STATE = (*instructions[code])();
 
 
 			if (STATE != 2)
-				++registers.PSW.IP;					// изменение PC
+				++registers.PSW.IP;					// изменение IP
+		}
+		else
+		{
+			SetConsoleTextColor(15, 12);
+			cerr << "IP: " << registers.PSW.IP << "  [ ERORR: Unknown command code: 0x" << code  << " ]"<< endl;
+			STATE = 0;
+			SetConsoleTextColor(7, 0);
+		}
+		
 	}
 	return 0;
 }
 void Computer::Trace()                   // трассировка покомандная
 {
-	cout << endl;
 	Operations code = static_cast<Operations>(RC.Code);
-	cout << "IP: " << setfill('0') << setw(5) << registers.PSW.IP;
-	cout << " Code: " << setfill('0') << setw(2) << hex << int(RC.Code) << endl << "->";
-		for (int i = 0; i < 4; ++i)
-			cout << setfill('0') << setw(2) << hex << int(RC.rc[i]) << ' ';
+	/*cout << "IP: " << setfill('0') << setw(5) << registers.PSW.IP << " ";
 		switch (code)
 		{
 		case IIN:
@@ -169,6 +188,8 @@ void Computer::Trace()                   // трассировка покомандная
 		case FOUT:
 			cout << "\t FOUT: ";
 			break;
-		}
+		default: cout << endl;
+			break;
+		}*/
 }
 

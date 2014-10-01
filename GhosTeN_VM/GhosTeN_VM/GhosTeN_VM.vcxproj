@@ -66,6 +66,7 @@
   <ItemGroup>
     <ClInclude Include="Command.h" />
     <ClInclude Include="Computer.h" />
+    <ClInclude Include="Debug.h" />
     <ClInclude Include="Memory.h" />
     <ClInclude Include="operation.h" />
     <ClInclude Include="RegisterCommand.h" />
